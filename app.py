@@ -107,6 +107,11 @@ def description_card():
                 id="intro",
                 children="Esta herramienta contiene información sobre la demanda energética total en Austria cada hora según lo públicado en ENTSO-E Data Portal. Adicionalmente, permite realizar pronósticos hasta 5 dias en el futuro."
             ),
+            # Pie de pagina con los autores del tablero
+            html.P(
+                "Elaborado por: Camilo Naranjo, Julian Castañeda y Leydi Pichon",
+                style=dict(fontSize="12px", fontStyle="italic", marginTop="10px"),
+            ),
         ],
     )
 
@@ -146,7 +151,9 @@ def generate_control_card():
                         children=[
                             dcc.Dropdown(
                                 id="dropdown-hora-inicial-hora",
-                                options=[{"label": i, "value": i} for i in np.arange(0,25)],
+                                # Horas validas de 0 a 23: la hora 24 generaba una fecha invalida
+                                # ("AAAA-MM-DD 24:0") y pd.to_datetime fallaba al actualizar la grafica
+                                options=[{"label": i, "value": i} for i in np.arange(0,24)],
                                 value=pd.to_datetime(max(data.index)-dt.timedelta(days=7)).hour,
                                 # style=dict(width='50%', display="inline-block")
                             )
